@@ -1,0 +1,24 @@
+<!-- Bootstrap Loader -->
+<div id="overlay">
+  <div class="loader"></div>
+</div>
+
+<!-- Fixed navbar -->
+<div *ngIf="isSessionExists == false">
+  <app-header></app-header>
+</div>
+<div *ngIf="isSessionExists == true">
+  <app-session-header [isSessionExists]="isSessionExists" [userName]="userName"></app-session-header>
+</div>
+
+<!-- Body -->
+<div class="container-fluid" id="main-content">
+  <div class="content-wrapper">
+    
+      <router-outlet></router-outlet>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<app-footer></app-footer>

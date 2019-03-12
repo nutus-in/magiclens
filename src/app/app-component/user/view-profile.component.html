@@ -1,0 +1,79 @@
+<!-- My Profile -->
+<div class="container">
+  <div class="row">
+      <div class="col-md-6">
+          <div class="panel panel-info">
+              <div class="panel-heading">
+                  <h3>{{profile.fullname}}'s Profile <a href="javascript:void(0);" routerLink="/profile/settings" title="Edit Profile Settings"><span class="glyphicon glyphicon-cog" style="color: #f39d23;"></span></a></h3>
+              </div>
+              <div id="divProfileInfo" class="panel-body">
+                    <div class="col-md-2" style="text-align: center;">
+                        <span class="image-fa-size">
+                          <i class="fa fa-user"></i>
+                        </span>
+                    </div>
+                    <div class="col-md-10">
+                        <p *ngIf="profile.is_profile_completed == false"><span class="profile-status-notification">Profile not completed. <a href="javascript:void(0);" routerLink="/profile/settings">Click here</a> to update.</span></p>
+                        <p class="headerText">{{profile.obsession}}</p>
+                        <p *ngIf="profile.public_profile_url == null">Add your public profile url like facebook, instagram etc.</p>
+                        <p *ngIf="profile.public_profile_url != null"><a href="{{profile.public_profile_url}}" target="_blank"><i>Public Profile</i></a></p>
+                        <p>{{profile.desc}}</p>
+                        <p>Company: {{profile.company}}</p>
+                        <p class="dimText">{{profile.full_address}}</p>
+                    </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3><span class="glyphicon glyphicon-signal"></span> Metrics</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="info-box blue-bg">
+                                    <i class="fa fa-camera"></i>
+                                    <div class="count">{{metric.total_product_count}}</div>
+                                    <div class="title">Total Products</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="info-box dark-bg">
+                                    <i class="fa fa-cloud-download-alt"></i>
+                                    <div class="count">{{metric.incoming_rental_request_count}}</div>
+                                    <div class="title">Total Incoming</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="info-box green-bg">
+                                    <i class="fa fa-cloud-upload-alt"></i>
+                                    <div class="count">{{metric.outgoing_rental_request_count}}</div>
+                                    <div class="title">Total Outgoing</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3><span class="glyphicon glyphicon-dashboard"></span> Dashboard</h3>
+                </div>
+                <div id="divProfileInfo" class="panel-body">
+                    <div class="col-md-12">
+                        <app-my-product [profile]="profile"></app-my-product>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

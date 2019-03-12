@@ -1,0 +1,45 @@
+.panel-heading {
+    padding: 1px 0px 0px 15px;
+}
+
+.actionButtonDiv {
+    padding: 10px 5px 10px 5px; 
+    text-align: left;
+}
+
+.btn-custom {
+    width: 100px;
+}
+
+#divItemsList table tbody tr td:first-child {
+    width: 15%;
+}
+
+#divItemsList table tbody tr td:first-child + td {
+    width: 60%;
+}
+
+#divItemsList table tbody tr td:first-child + td + td{
+    width: 13%;
+}
+
+#divItemsList table tbody tr td:first-child + td + td + td{
+    width: 12%;
+}
+
+#divItemsList table tbody tr td span {
+    padding: 7px 7px 7px 0px;
+}
+
+.image-viewer-dialog {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.image-viewer-content {
+    background-color: transparent;
+}
+
+.modal-body-imgview {
+    padding: 10px;
+}

@@ -1,0 +1,32 @@
+.loggedUser {
+    padding: 16px 10px 5px 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px
+}
+
+.brand {
+    padding: 3px 2px 3px 3px;
+    font-size: 25px !important;
+    font-weight: 750;
+}
+
+.brand-area {
+    padding: 3px 3px 3px 3px;
+    font-weight: bold;
+    font-style: italic;
+    color: #00fff5;
+}
+
+.badge {
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    padding: 2px 5px;
+    background: #ef0c0c;
+}
+
+.badge .bg-important {
+    background: #ef0c0c;
+    font-size: 11px;
+}

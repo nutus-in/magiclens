@@ -1,0 +1,240 @@
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3><span class="glyphicon glyphicon-cog"></span> Profile / Settings <font *ngIf="profile.is_active == false" style="color: red;">(<i>deactivated</i>)</font></h3>
+            </div>
+            <div class="panel-body">
+                <form id="frmConfig" (ngSubmit)="updateUserSettings()" class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                  <div class="form-group">
+                      <div class="col-sm-6">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-phone"></i></span>
+                          <input id="phone" [(ngModel)]="profile.phone" #phone="ngModel" class="form-control" name="phone" type="text" placeholder="Phone" disabled="disabled">
+                        </div>
+                      </div>
+                    <div class="col-sm-6">
+                      <div class="input-group formControDiv">
+                        <span class="input-group-addon addon-width"><i class="fa fa-envelope"></i></span>
+                        <input id="email" [(ngModel)]="profile.email" #email="ngModel" class="form-control" required maxlength="30" name="email" type="text" placeholder="Email">
+                      </div>
+                      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                          <div *ngIf="email.errors.required">
+                              Email is required.
+                          </div>
+                          <div *ngIf="email.errors.maxlength">
+                              Email cannot exceed 30 characters.
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-6">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-building"></i></span>
+                          <input id="company" [(ngModel)]="profile.company" #company="ngModel" class="form-control" maxlength="50" name="company" type="text" placeholder="Where do you work?">
+                        </div>
+                        <div *ngIf="company.invalid && (company.dirty || company.touched)" class="alert alert-danger">
+                          <div *ngIf="company.errors.maxlength">
+                              Workplace cannot exceed 50 characters.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="input-group formControDiv">
+                            <span class="input-group-addon addon-width"><i class="fa fa-flag"></i></span>
+                            <input id="public_profile_url" [(ngModel)]="profile.public_profile_url" #public_profile_url="ngModel" class="form-control" maxlength="100" name="public_profile_url" type="text" placeholder="Facebook, Insta etc. Public Profile Url">
+                          </div>
+                          <div *ngIf="public_profile_url.invalid && (public_profile_url.dirty || public_profile_url.touched)" class="alert alert-danger">
+                            <div *ngIf="public_profile_url.errors.maxlength">
+                              Public profile url cannot exceed 100 characters.
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-6">
+                      <div class="input-group formControDiv">
+                        <span class="input-group-addon addon-width"><i class="fa fa-font"></i></span>
+                        <input id="first_name" [(ngModel)]="profile.first_name" #first_name="ngModel" class="form-control" required maxlength="20" name="first_name" type="text" placeholder="First Name">
+                      </div>
+                      <div *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)" class="alert alert-danger">
+                        <div *ngIf="first_name.errors.required">
+                            First name is required.
+                        </div>
+                        <div *ngIf="first_name.errors.maxlength">
+                            First name cannot exceed 20 characters.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="input-group formControDiv">
+                        <span class="input-group-addon addon-width"><i class="fa fa-font"></i></span>
+                        <input id="last_name" [(ngModel)]="profile.last_name" #last_name="ngModel" class="form-control" required maxlength="20" name="last_name" type="text" placeholder="Last Name">
+                      </div>
+                      <div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="alert alert-danger">
+                          <div *ngIf="last_name.errors.required">
+                              Last name is required.
+                          </div>
+                        <div *ngIf="last_name.errors.maxlength">
+                            Last name cannot exceed 20 characters.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-6">
+                      <div class="input-group formControDiv">
+                        <span class="input-group-addon addon-width"><i class="fa fa-user-tie"></i></span>
+                        <input id="obsession" [(ngModel)]="profile.obsession" #obsession="ngModel" class="form-control" maxlength="100" name="obsession" type="text" placeholder="Your obsession? E.g., Photography, Travel etc.">
+                      </div>
+                      <div *ngIf="obsession.invalid && (obsession.dirty || obsession.touched)" class="alert alert-danger">
+                        <div *ngIf="obsession.errors.maxlength">
+                            Obsession cannot exceed 100 characters.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="input-group formControDiv">
+                        <span class="input-group-addon addon-width"><i class="fa fa-info"></i></span>
+                        <input id="desc" [(ngModel)]="profile.desc" #desc="ngModel" class="form-control" maxlength="100" name="desc" type="text" placeholder="Tell something about yourselve...">
+                      </div>
+                      <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                        <div *ngIf="desc.errors.maxlength">
+                            Profile description cannot exceed 100 characters.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-6">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-city"></i></span>
+                          <input id="city" [(ngModel)]="profile.city" #city="ngModel" class="form-control" maxlength="20" name="city" type="text" placeholder="City">
+                        </div>
+                        <div *ngIf="city.invalid && (city.dirty || city.touched)" class="alert alert-danger">
+                            <div *ngIf="city.errors.maxlength">
+                                City cannot exceed 20 characters.
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-city"></i></span>
+                          <input id="town" [(ngModel)]="profile.town" #town="ngModel" class="form-control" maxlength="20" name="town" type="text" placeholder="Town">
+                        </div>
+                        <div *ngIf="town.invalid && (town.dirty || town.touched)" class="alert alert-danger">
+                            <div *ngIf="town.errors.maxlength">
+                                Town cannot exceed 20 characters.
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-6">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-map"></i></span>
+                          <input id="locality" [(ngModel)]="profile.locality" #locality="ngModel" class="form-control" maxlength="50" name="locality" type="text" placeholder="Locality">
+                        </div>
+                        <div *ngIf="locality.invalid && (locality.dirty || locality.touched)" class="alert alert-danger">
+                            <div *ngIf="locality.errors.maxlength">
+                                Locality cannot exceed 50 characters.
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-map-marker-alt"></i></span>
+                          <input id="zipcode" [(ngModel)]="profile.zipcode" #zipcode="ngModel" class="form-control" maxlength="6" name="zipcode" type="text" placeholder="Zip Code">
+                        </div>
+                        <div *ngIf="zipcode.invalid && (zipcode.dirty || zipcode.touched)" class="alert alert-danger">
+                            <div *ngIf="zipcode.errors.maxlength">
+                                Zipcode cannot exceed 6 characters.
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-12">
+                        <div class="input-group formControDiv">
+                          <span class="input-group-addon addon-width"><i class="fa fa-map-marked-alt"></i></span>
+                          <textarea id="address" [(ngModel)]="profile.address" #address="ngModel" class="form-control" required maxlength="100" name="address" rows="3" placeholder="Let people find your address. E.g., Work location, House / Flat No., Street etc."></textarea>
+                        </div>
+                        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="alert alert-danger">
+                          <div *ngIf="address.errors.required">
+                              Address is required.
+                          </div>
+                          <div *ngIf="address.errors.maxlength">
+                              Address cannot exceed 100 characters.
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-10">
+                      <button type="submit" class="btn btn-info" [disabled]="profile.is_active == false">Save</button>&nbsp;
+                      <button type="button" class="btn btn-info" [disabled]="profile.is_active == false" (click)="gotoProfile()">Back</button>&nbsp;
+                      <button *ngIf="profile.is_active == false" type="button" class="btn btn-warning" (click)="activateDeactivateProfile()"><i>Activate Profile</i></button>
+                      <button *ngIf="profile.is_active == true" type="button" class="btn btn-warning" (click)="activateDeactivateProfile()"><i>Deactivate Profile</i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-10">
+                      <p><b>Note:</b> Deactivate profile is not visible to other users.</p>
+                    </div>
+                  </div>
+              </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<button type="button" style="display: none;" class="btn btn-info " id="showSuccessModal" data-toggle="modal" data-target="#successModal">Open Success Modal</button>
+<button type="button" style="display: none;" class="btn btn-info " id="showFailureModal" data-toggle="modal" data-target="#failureModal">Open Failure Modal</button>
+<!-- Success Modal -->
+<div class="custom-success-modal modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-thumbs-up"></span> Success</h4>
+            </div>
+            <div class="modal-body"><h4>Profile settings updated successfully!</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Failure Modal -->
+<div class="custom-error-modal modal fade" id="failureModal" tabindex="-1" role="dialog" aria-labelledby="failureModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</h4>
+            </div>
+            <div class="modal-body"><h4>Something went wrong. Please try again!</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Validation Alert Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showValidationModal" data-toggle="modal" data-target="#validationModal">Open Validation Modal</button>
+<div class="custom-modal modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-alert" style="color: red;"></span>&nbsp; Input Not Allowed</h4>
+            </div>
+            <div class="modal-body"><h4>{{validationMsg}}</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

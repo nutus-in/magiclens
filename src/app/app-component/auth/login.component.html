@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-12">
+        <div style="text-align: center; color: #31708f;">
+            <h4>the best free app for renting Camera gears</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3><span class="glyphicon glyphicon-log-in"></span> Login</h3>
+            </div>
+            <div class="panel-body">
+                <form [formGroup]=loginForm (ngSubmit)="login()" class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group formControDiv">
+                                <span class="input-group-addon addon-width"><i class="fa fa-phone"></i></span>
+                                <input formControlName="username" id="username" [(ngModel)]="loginData.username" class="form-control" required minlength="10" maxlength="10" name="username" type="text" placeholder="Mobile Number">
+                            </div>
+                            <div *ngIf="(!submitted && f.username.errors && f.username.invalid && (f.username.dirty || f.username.touched)) || (submitted && f.username.errors)" class="alert alert-danger">
+                                <div *ngIf="f.username.errors.required">
+                                    Phone number is required.
+                                </div>
+                                <div *ngIf="f.username.errors.minlength">
+                                    Phone number must be 10 numbers.
+                                </div>
+                                <div *ngIf="f.username.errors.maxlength">
+                                    Phone number cannot exceed 10 numbers.
+                                </div>
+                            </div>
+                            <div *ngIf="isPhoneNumber == false" class="alert alert-danger">
+                                <div>
+                                   Phone number should be numeric.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group formControDiv">
+                                <span class="input-group-addon addon-width"><i class="fa fa-lock"></i></span>
+                                <input formControlName="password" id="password" [(ngModel)]="loginData.password" class="form-control" required name="password" type="password" placeholder="Password">
+                            </div>
+                            <div *ngIf="(!submitted && f.password.errors && f.password.invalid && (f.password.dirty || f.password.touched)) || (submitted && f.password.errors)" class="alert alert-danger">
+                                <div *ngIf="f.password.errors.required">
+                                    Password is required.
+                                </div>
+                            </div>
+                            <div *ngIf="isUserValid == false" class="alert alert-danger">
+                                Invalid Phone Number or Password.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-info">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                Don't have an account? <a href="javascript:void(0);" routerLink="/register">Click here</a> to register.
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>

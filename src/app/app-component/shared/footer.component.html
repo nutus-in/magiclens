@@ -1,0 +1,22 @@
+<div class="footer">
+  <p class="trimPara">Powered By: triprhino &copy; 2019. All Rights Reserved. Beta V1.0.0</p>
+  <p class="trimPara footerLinkFont"><a href="javascript:void(0);" routerLink="/support/help">Support</a> | <a href="javascript:void(0);" routerLink="/support/policies">Policies</a> | <a href="javascript:void(0);" (click)="openBugReportForm()">Report a Bug</a></p>
+</div>
+<!-- Info Modal -->
+<button type="button" style="display: none;" class="btn btn-info" id="btnInfoModal" data-toggle="modal" data-target="#infoModal">Open Info Modal</button>
+<div class="custom-modal modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span><i class="fa fa-info-circle"></i></span> Information</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Please Login to report a bug!</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,246 @@
+body {
+    background-color: transparent;
+    font-size: 13px;
+    color: rgb(72, 72, 72);
+}
+
+.navbar {
+    border-radius: 0px;
+    border: none;
+}
+
+.navbar-brand {
+    font-size: 19px;
+}
+
+.panel-body {
+    padding: 5px;
+    padding-top: 10px;
+}
+
+.panel-heading {
+    padding: 1px 0px 0px 15px;
+}
+
+.glyphicon {
+    font-size: 20px;
+}
+
+/*
+* Headers, Labels and Paragraph Texts
+*/
+
+.headerText {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(75, 72, 72);
+}
+
+.dimText {
+    font-size: 11px;
+    font-style: italic;
+    color: gray;
+}
+
+/*
+* Bootstrap Customs
+*/
+
+.alert {
+    padding: 5px;
+    margin-bottom: 0px;
+}
+
+.navbar-custom {
+    background-color: #3aa7f9;
+    border-color: #3aa7f9;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #fff;
+    padding-top: 7px;
+    padding-left: 0px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #fff;
+    font-size: 15px;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+    color: yellow;
+    background: #188fbd;
+    font-size: 15px;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: #188fbd;
+}
+
+.navbar-inverse .navbar-toggle {
+    border-color: #188fbd;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color: #188fbd;
+}
+
+.input-group-addon {
+    color: #1c6488;
+}
+
+/*
+* Custom Styles
+*/
+.content-wrapper {
+    padding-bottom: 50px;
+}
+
+.formControDiv {
+    padding-bottom: 5px;
+}
+
+.imageDiv {
+    text-align: center;
+}
+
+.image-fa-size {
+    font-size: 6em;
+}
+
+.image-fa-size-grid {
+    font-size: 4em;
+}
+
+/* Custom Modal */
+.custom-modal .modal-header {
+    background-color: #65d9e45c;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.custom-success-modal {
+    border-color: #74f77f;
+}
+
+.custom-success-modal .modal-header {
+    color: #fff;
+    background-color: #98eea9;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 1px solid #74f77f;
+}
+
+.custom-success-modal .modal-header .modal-title {
+    font-weight: bold;
+}
+
+.custom-success-modal .modal-footer {
+    padding-top: 0;
+    border-top: none
+}
+
+.custom-error-modal {
+    border-color: #fc7777;
+}
+
+.custom-error-modal .modal-header {
+    color: #fff;
+    background-color: #ffadad;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 1px solid #fc7777;
+}
+
+.custom-error-modal .modal-header .modal-title {
+    font-weight: bold;
+}
+
+.custom-error-modal .modal-footer {
+    padding-top: 0;
+    border-top: none
+}
+
+.dialog-icon{
+    margin-top: 10px;
+    font-size: 40px;
+}
+
+/*
+* Form Control
+*/
+.addon-width {
+    min-width: 40px;
+}
+
+/*
+* Owl Datetime
+*/
+.cdk-overlay-container {
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 9999999 !important;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 9999999 !important;
+}
+
+/*
+* Font Awesome Icon Color
+*/
+
+.fa-red {
+    color: red;
+}
+
+.fa-green {
+    color: #74f77f;
+}
+
+/*
+* Image Viewer
+*/
+.overlay-left[_ngcontent-c10] {
+    background-color: transparent !important;
+}
+
+.overlay-right[_ngcontent-c10] {
+    background-color: transparent !important;
+}
+
+#slider-buttons-left[_ngcontent-c10] {
+    color: yellow !important;
+}
+
+#slider-buttons-right[_ngcontent-c10] {
+    color: yellow !important;
+}
+
+.overlay-left[_ngcontent-c8] {
+    background-color: transparent !important;
+}
+
+.overlay-right[_ngcontent-c8] {
+    background-color: transparent !important;
+}
+
+#slider-buttons-left[_ngcontent-c8] {
+    color: yellow !important;
+}
+
+#slider-buttons-right[_ngcontent-c8] {
+    color: yellow !important;
+}

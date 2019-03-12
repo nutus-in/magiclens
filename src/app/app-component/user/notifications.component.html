@@ -1,0 +1,69 @@
+<!-- Notifications -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 i18n><span class="glyphicon glyphicon-bell"></span> Notifications</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="divItemsList" class="table-responsive">
+                        <table class="table table-striped" [mfData]="notifications" #mf="mfDataTable" [mfRowsOnPage]="10">
+                            <tbody>
+                                <tr *ngFor="let item of notifications">
+                                    <td class="col-md-9" *ngIf="item.type == 'RENT_REQUEST'">
+                                      <div>
+                                        <p class="notificationText" *ngIf="item.is_read == false"><b>{{item.desc}}</b></p>
+                                        <p class="notificationText" *ngIf="item.is_read == true">{{item.desc}}</p>
+                                        <p class="dimText">Date: {{item.date}}</p>
+                                      </div>
+                                    </td>
+                                    <td class="col-md-3" style="text-align:right;" *ngIf="item.type == 'RENT_REQUEST'">
+                                        <span *ngIf="item.rental_status != 'COMPLETED' && item.rental_status != 'APPROVED' && item.rental_status != 'DENIED'"><button class="btn btn-info btn-custom" type="button" title="Approve rent request" (click)="approveRentalRequest($event.target, item, 'Approved', item.rental_id)">Approve &nbsp;<i class="fa fa-thumbs-up"></i></button></span>
+                                        <span *ngIf="item.rental_status != 'COMPLETED' && item.rental_status != 'APPROVED' && item.rental_status != 'DENIED'" style="padding-left: 5px;"><button class="btn btn-default btn-custom" type="button" title="Deny rent request" (click)="denyRentalRequest($event.target, item, 'Denied', item.rental_id)">Deny &nbsp;<i class="fa fa-thumbs-down fa-red"></i></button></span>
+                                        <span *ngIf="item.rental_status == 'APPROVED'"><h5>{{item.rental_status}} &nbsp;<i class="fa fa-thumbs-up fa-green"></i></h5></span>
+                                        <span *ngIf="item.rental_status == 'DENIED'"><h5>{{item.rental_status}} &nbsp;<i class="fa fa-thumbs-down fa-red"></i></h5></span>
+                                    </td>
+                                    <td class="col-md-9" *ngIf="item.type == 'RENT_RESPONSE'">
+                                        <div>
+                                          <p class="notificationText" *ngIf="item.is_read == false"><b>{{item.desc}}</b></p>
+                                          <p class="notificationText" *ngIf="item.is_read == true">{{item.desc}}</p>
+                                          <p class="dimText">Date: {{item.date}}</p>
+                                        </div>
+                                      </td>
+                                      <td class="col-md-3" style="text-align:right;" *ngIf="item.type == 'RENT_RESPONSE'">
+                                        <div style="padding-top: 5px;"><button class="btn btn-default btn-custom" type="button" title="Call Owner" (click)="showProductOwnerInfo(item.product_id)">Call &nbsp;<i class="fa fa-phone"></i></button></div>
+                                      </td>
+                                </tr>
+                                <tr *ngIf="notifications.length == 0">
+                                    <td style="text-align: center;">
+                                        <h4>No Notifications Found!</h4>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" style="display: none;" class="btn btn-info " id="btnShowOwnerInfoModal" data-toggle="modal" data-target="#ownerInfoModal">Open Owner Info Modal</button>
+<!-- Owner Info Modal -->
+<div class="custom-modal modal fade" id="ownerInfoModal" tabindex="-1" role="dialog" aria-labelledby="ownerInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Owner Details</h4>
+            </div>
+            <div class="modal-body">
+                <h4 *ngIf="productOwner.fullname != null">{{productOwner.fullname}} ({{productOwner.phone}})</h4>
+                <h4 *ngIf="productOwner.fullname == null">Mobile Number: {{productOwner.phone}}</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

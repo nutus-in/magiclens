@@ -1,0 +1,27 @@
+.panel-heading {
+    padding: 1px 0px 0px 15px;
+}
+
+.addon-width {
+    min-width: 40px;
+}
+
+.input-group-addon-reg-custom {
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    color: #fff;
+    font-weight: bold;
+}
+
+.a-reg {
+    color: #fff;
+}
+
+.a-reg:focus, .a-reg:hover {
+    color: fff;
+}
+
+.a-reg:focus, .a-reg:hover {
+    color: fff;
+    text-decoration: none;
+}

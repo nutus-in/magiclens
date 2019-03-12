@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3><span><i class="fa fa-spider" style="color: red;"></i></span> Report Bug</h3>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" (ngSubmit)="reportBug()" role="form" action="" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group formControDiv">
+                                <span class="input-group-addon addon-width"><i class="fa fa-font"></i></span>
+                                <input id="title" [(ngModel)]="bugData.title" #title="ngModel" class="form-control" required maxlength="100" name="title" type="text" placeholder="Bug Title">
+                            </div>
+                            <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                                <div *ngIf="title.errors.required">
+                                    Title is required.
+                                </div>
+                                <div *ngIf="title.errors.maxlength">
+                                    Title cannot exceed 100 numbers.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group formControDiv">
+                              <span class="input-group-addon addon-width"><i class="fa fa-font"></i></span>
+                              <textarea id="desc" [(ngModel)]="bugData.desc" #desc="ngModel" class="form-control" required maxlength="250" name="desc" rows="5" placeholder="Bug Descriptions"></textarea>
+                            </div>
+                            <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                              <div *ngIf="desc.errors.required">
+                                  Bug description is required.
+                              </div>
+                              <div *ngIf="desc.errors.maxlength">
+                                  Bug description cannot exceed 250 characters.
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-info">Report</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                Dear customer, sorry for the inconvenienced caused. The bug/issue will be fixed in upcoming release.
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+<!-- Validation Alert Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showValidationModal" data-toggle="modal" data-target="#validationModal">Open Validation Modal</button>
+<div class="custom-modal modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-alert" style="color: red;"></span>&nbsp; Input Not Allowed</h4>
+            </div>
+            <div class="modal-body"><h4>{{validationMsg}}</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

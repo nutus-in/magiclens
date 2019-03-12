@@ -1,0 +1,9 @@
+h4 {
+    color: brown;
+    padding: 5px;
+}
+
+.detail-info li {
+    font-size: 12px;
+    font-style: italic;
+}

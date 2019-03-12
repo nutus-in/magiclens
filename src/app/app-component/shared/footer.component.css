@@ -1,0 +1,21 @@
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 40px;
+    background-color: #ddd;
+    color:  #777884 !important;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 13px;
+    padding-bottom: 10px;
+}
+
+.trimPara {
+    margin: 0 0 0 0;
+}
+
+.footerLinkFont {
+    font-size: 12px;
+}

@@ -1,0 +1,240 @@
+<!-- Search -->
+<app-search (changed)="searchTextChanged($event)" (clicked)="search($event)"></app-search>
+<div class="container">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="panel panel-info">
+              <div class="panel-heading">
+                  <h3 i18n>Items Near You</h3>
+              </div>
+              <div id="divContent" class="panel-body">
+                  <div id="divItemsList" class="table-responsive">
+                      <table class="table table-striped" [mfData]="productsData" #mf="mfDataTable" [mfRowsOnPage]="10">
+                          <thead>
+                              <tr>
+                                  <th>Image</th>
+                                  <th>Description</th>
+                                  <th>Price (&#8377; / 24 Hours)</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let item of productsData">
+                                  <td><!--<img src="" alt="Rental Product Image">-->
+                                    <div class="imageDiv">
+                                        <a href="#" data-toggle="modal" data-target="#imageViewModal" (click)="loadProductImages(item.product_id)">
+                                            <span class="image-fa-size-grid">
+                                                <i *ngIf="item.category == 'camera'" class="fa fa-camera" title="Ask Owner for actual images"></i>
+                                                <i *ngIf="item.category == 'action_camera'" class="fa fa-camera-retro" title="Ask Owner for actual images"></i>
+                                                <i *ngIf="item.category == 'fly_camera'" class="fa fa-spider" title="Ask Owner for actual images"></i>
+                                                <i *ngIf="item.category == 'lens'" class="fa fa-search" title="Ask Owner for actual images"></i>
+                                                <i *ngIf="item.category == 'gimble'" class="fa fa-balance-scale" title="Ask Owner for actual images"></i>
+                                                <i *ngIf="item.category == 'accessories'" class="fa fa-toolbox" title="Ask Owner for actual images"></i>
+                                            </span><br/>
+                                            <span>{{item.images_count}} Images</span>
+                                        </a>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div>
+                                      <p class="headerText">{{item.name}}</p>
+                                      <p>{{item.desc}}</p>
+                                      <p class="dimText">{{item.full_address}}</p>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <p>{{item.price_per_day}}</p>
+                                  </td>
+                                  <td>
+                                    <div><button class="btn btn-warning btn-custom" type="button" title="Rent this product" (click)="showRentalRequestModal(item.product_id, item.price_per_day)">Rent &nbsp;<i class="fa fa-hand-holding"></i></button></div>
+                                    <div style="padding-top: 5px;"><button class="btn btn-default btn-custom" type="button" title="Call Owner" (click)="showProductOwnerInfo(item.owner_id, item.product_id)">Call &nbsp;<i class="fa fa-phone"></i></button></div>
+                                  </td>
+                              </tr>
+                              <tr *ngIf="productsData.length == 0">
+                                  <td colspan="4" style="text-align: center;">
+                                      <h4>No Products Found!</h4>
+                                  </td>
+                              </tr>
+                          </tbody>
+                          <tr>
+                            <td colspan="4">
+                              <mfBootstrapPaginator [rowsOnPageSet]="[10,25]"></mfBootstrapPaginator>
+                            </td>
+                          </tr>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Product rental request modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="btnShowRentalRequestModal" data-toggle="modal" data-target="#rentalRequestModal">Open Rental Request Modal</button>
+<div class="custom-modal modal fade" id="rentalRequestModal" tabindex="-1" role="dialog" aria-labelledby="rentalRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="frmConfig" (ngSubmit)="requestRental()" class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Request Rental</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                        <span class="input-group-addon addon-width"><i class="fa fa-calendar-alt"></i></span>
+                                        <input [owlDateTime]="from_date" [min]="todayDate" [owlDateTimeTrigger]="from_date" id="from_date" [(ngModel)]="rental.from_date" #from_date="ngModel" class="form-control" required name="from_date" type="text" placeholder="From Date">
+                                        <owl-date-time hour12Timer="true" #from_date></owl-date-time>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                        <span class="input-group-addon addon-width"><i class="fa fa-calendar-alt"></i></span>
+                                        <input [owlDateTime]="to_date" [min]="todayDate" (dateTimeChange)="showTotalPrice()" [owlDateTimeTrigger]="to_date" id="to_date" [(ngModel)]="rental.to_date" #to_date="ngModel" class="form-control" required name="to_date" type="text" placeholder="To Date">
+                                        <owl-date-time hour12Timer="true" #to_date></owl-date-time>
+                                    </div>
+                                    <div *ngIf="isToDateFromPast == true" class="alert alert-danger">
+                                        <div>
+                                           To date cannot be a past date from From date.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                        <span class="input-group-addon addon-width"><i class="fa fa-id-card"></i></span>
+                                        <select id="id_proof" name="id_proof" class="form-control" [(ngModel)]="rental.id_proof">
+                                            <option selected="selected" value="0">Select ID Proof</option>
+                                        </select>
+                                    </div>
+                                    <div *ngIf="isIDProofSelected == false" class="alert alert-danger">
+                                        <div>
+                                           Please select ID Proof.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                        <span class="input-group-addon addon-width"><i class="fa fa-credit-card"></i></span>
+                                        <input id="mode_of_payment" [(ngModel)]="rental.mode_of_payment" #mode_of_payment="ngModel" class="form-control" name="mode_of_payment" type="text" disabled="disabled" placeholder="CASH / PAYTM" title="Directly pay to owner by Cash or Paytm">
+                                    </div>
+                                    <p class="dimText">Note: Rental charge directly pay to owner by cash or paytm</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div *ngIf="isUpcomingOngoingRentalRequestExists == true" class="alert alert-danger">
+                                        <div>
+                                            {{existingRentalRequestValidationMessage}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button *ngIf="isUpcomingOngoingRentalRequestExists == false" class="btn btn-info" type="submit">Request</button>
+                    <button id="btnDiscardRentalRequest" class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Owner Info Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="btnShowOwnerInfoModal" data-toggle="modal" data-target="#ownerInfoModal">Open Owner Info Modal</button>
+<div class="custom-modal modal fade" id="ownerInfoModal" tabindex="-1" role="dialog" aria-labelledby="ownerInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Owner Details</h4>
+            </div>
+            <div *ngIf="isUpcomingOngoingRentalRequestExists == true" class="modal-body">
+                <h4 *ngIf="owner.fullname != null">{{owner.fullname}} ({{owner.phone}})</h4>
+                <h4 *ngIf="owner.fullname == null">Mobile Number: {{owner.phone}}</h4>
+            </div>
+            <div *ngIf="isUpcomingOngoingRentalRequestExists == false" class="modal-body">
+                <h4>You have to make a rental request at the portal first to retrieve the Owner's phone info.</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Image Viewer Modal -->
+<div class="custom-modal modal fade" id="imageViewModal" tabindex="-1" role="dialog" aria-labelledby="imageViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog image-viewer-dialog" role="document">
+        <div *ngIf="hasProductImages == true" class="modal-content image-viewer-content">
+            <div class="modal-body modal-body-imgview">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <angular-image-slider [images]="imagesUrl">
+                </angular-image-slider>
+            </div>
+        </div>
+        <div *ngIf="hasProductImages == false" class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3><i class="fa fa-info-circle"></i> No Images Found!</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Rental Request Successful Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showSuccessModal" data-toggle="modal" data-target="#successModal">Open Success Modal</button>
+<div class="custom-success-modal modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-thumbs-up"></span> Request Successfull</h4>
+            </div>
+            <div class="modal-body"><h4>Rental request sent. You will be able to contact the owner, once he approves the request.</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Error Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showErrorModal" data-toggle="modal" data-target="#errorModal">Open Error Modal</button>
+<div class="custom-error-modal modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</h4>
+            </div>
+            <div class="modal-body"><h4>Something went wrong. Please try again!</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Info Modal -->
+<button type="button" style="display: none;" class="btn btn-info" id="btnInfoModal" data-toggle="modal" data-target="#infoModal">Open Info Modal</button>
+<div class="custom-modal modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span><i class="fa fa-info-circle"></i></span> Information</h4>
+            </div>
+            <div class="modal-body">
+                <h4>{{infoLabel}}</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

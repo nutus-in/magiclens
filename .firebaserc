@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "triprhino-rentals": "triprhino-rentals",
+    "default": "triprhino-rentals",
+    "rentals-triprhino": "rentals-triprhino"
+  }
+}

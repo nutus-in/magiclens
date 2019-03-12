@@ -1,0 +1,380 @@
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#myproducts" aria-controls="myproducts" role="tab" data-toggle="tab">My Products</a></li>
+    <li role="presentation"><a href="#incoming_requests" aria-controls="incoming_requests" role="tab" data-toggle="tab">Incoming Requests</a></li>
+    <li role="presentation"><a href="#outgoing_requests" aria-controls="outgoing_requests" role="tab" data-toggle="tab">Outgoing Requests</a></li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="myproducts">
+        <!-- User Listed Products -->
+        <div id="divAddProductButton" class="actionButtonDiv">
+            <button href="javascript:void(0);" id="addProduct" class="btn btn-warning" data-toggle="modal" data-target="#addProductModal" title="Add Product">List Product <span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+        <div id="divItemsList" class="table-responsive">
+            <table class="table table-striped" [mfData]="productsData" #mf="mfDataTable" [mfRowsOnPage]="10">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Price (&#8377; / 24 Hours)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of productsData">
+                        <td>
+                            <div class="imageDiv">
+                                <a href="#" data-toggle="modal" data-target="#imageViewModal" (click)="loadProductImages(item.product_id)">
+                                    <span class="image-fa-size-grid">
+                                        <i *ngIf="item.category == 'camera'" class="fa fa-camera" title="Click for images"></i>
+                                        <i *ngIf="item.category == 'action_camera'" class="fa fa-camera-retro" title="Click for images"></i>
+                                        <i *ngIf="item.category == 'fly_camera'" class="fa fa-spider" title="Click for images"></i>
+                                        <i *ngIf="item.category == 'lens'" class="fa fa-search" title="Click for images"></i>
+                                        <i *ngIf="item.category == 'gimble'" class="fa fa-balance-scale" title="Click for images"></i>
+                                        <i *ngIf="item.category == 'accessories'" class="fa fa-toolbox" title="Click for images"></i>
+                                    </span><br/>
+                                    <span>{{item.images_count}} Images</span>
+                                </a>
+                            </div>
+                        <td>
+                            <div>
+                            <p class="headerText">{{item.name}}</p>
+                            <p>{{item.desc}}</p>
+                            </div>
+                        </td>
+                        <td>
+                            <p>{{item.price_per_day}}</p>
+                        </td>
+                        <td>
+                            <span><a href="javascript:void(0);" (click)="editProduct(item.product_id)" title="Edit Product"><span class="glyphicon glyphicon-edit"></span></a></span>
+                            <span><a href="javascript:void(0);" data-toggle="modal" data-target="#imageUploadModal" (click)="setProductIdForImageUpload(item.product_id)" title="Upload Images"><span class="glyphicon glyphicon-picture"></span></a></span>
+                            <span><a href="javascript:void(0);" (click)="deleteProductConfirmation(item.product_id)" title="Delete Product"><span class="glyphicon glyphicon-trash"></span></a></span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productsData.length == 0">
+                        <td colspan="4" style="text-align: center;">
+                            <h4>No Products Yet!</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="incoming_requests">
+        <!-- Incoming Rental Requests -->
+        <div id="divIncomingRentalsList" class="table-responsive">
+            <table class="table table-striped" [mfData]="incomingRentalsData" #mf="mfDataTable" [mfRowsOnPage]="10">
+                <thead>
+                    <tr>
+                        <th>Details</th>
+                        <th>Total Amount</th>
+                        <th>Rentals Status</th>
+                        <th>Payment Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of incomingRentalsData">
+                        <td>
+                            <div>
+                                <p>
+                                    Item {{item.product_name}} for dates <i>{{item.from_date}}</i> till <i>{{item.from_date}}</i>
+                                </p>
+                                <p class="dimText">
+                                    <b>Requested by:</b> {{item.requesting_user_fullname}} <br/>
+                                    <b>Mode of payment:</b> {{item.mode_of_payment}}
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            <p>{{item.total_amount}}</p>
+                        </td>
+                        <td>
+                            <p #item_status>{{item.status}}</p>
+                        </td>
+                        <td>
+                            <p>{{item.payment_status}}</p>
+                        </td>
+                        <td>
+                            <div *ngIf="item.status != 'COMPLETED' && item.status != 'APPROVED' && item.is_past_date == false"><button class="btn btn-default btn-custom" id="btnApproveRental" type="button" title="Approve rental request" (click)="approveRentalRequest($event.target, 'Approved', item.rental_id, item_status)">Approve &nbsp;<i class="fa fa-thumbs-up fa-green"></i></button></div>
+                            <div *ngIf="item.status != 'COMPLETED' && (item.status == 'APPROVED' || item.is_past_date == true)"><button class="btn btn-default btn-custom" id="btnApproveRental" type="button" title="Rental request approved" disabled="disabled">Approved &nbsp;<i class="fa fa-thumbs-up"></i></button></div>
+                            <div *ngIf="item.status != 'COMPLETED' && item.status != 'DENIED' && item.is_past_date == false" style="padding-top: 5px;"><button class="btn btn-default btn-custom" id="btnDenyRental" type="button" title="Deny request" (click)="denyRentalRequest($event.target, 'Denied', item.rental_id, item_status)">Deny &nbsp;<i class="fa fa-thumbs-down fa-red"></i></button></div>
+                            <div *ngIf="item.status != 'COMPLETED' && (item.status == 'DENIED' || item.is_past_date == true)" style="padding-top: 5px;"><button class="btn btn-default btn-custom" id="btnDenyRental" type="button" title="Rental request denied" disabled="disabled">Denied &nbsp;<i class="fa fa-thumbs-down"></i></button></div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="incomingRentalsData.length == 0">
+                        <td colspan="4" style="text-align: center;">
+                            <h4>No Incoming Rental Requests Yet!</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="outgoing_requests">
+        <!-- Outgoing Rental Requests -->
+        <div id="divOutgoingRentalsList" class="table-responsive">
+            <table class="table table-striped" [mfData]="outgoingRentalsData" #mf="mfDataTable" [mfRowsOnPage]="10">
+                <thead>
+                    <tr>
+                        <th>Details</th>
+                        <th>Total Amount</th>
+                        <th>Rentals Status</th>
+                        <th>Payment Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of outgoingRentalsData">
+                        <td style="width:50%;">
+                            <div>
+                                <p>
+                                    You have made a rental request for item {{item.product_name}} for <i>{{item.from_date}}</i> till <i>{{item.from_date}}</i>
+                                </p>
+                                <p class="dimText">
+                                    <b>Mode of payment:</b> {{item.mode_of_payment}}
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            <p>{{item.total_amount}}</p>
+                        </td>
+                        <td>
+                            <p>{{item.status}}</p>
+                        </td>
+                        <td>
+                            <p>{{item.payment_status}}</p>
+                        </td>
+                        <td style="text-align:left;">
+                            <div *ngIf="item.status != 'DENIED'" style="padding-top: 5px;"><button class="btn btn-default btn-custom" type="button" title="Call Owner" (click)="showProductOwnerInfo(item.product_id)">Call &nbsp;<i class="fa fa-phone"></i></button></div>
+                            <div *ngIf="item.status == 'DENIED'" style="padding-top: 5px;"><button class="btn btn-default btn-custom" type="button" title="Call Owner" disabled="disabled">Call &nbsp;<i class="fa fa-phone"></i></button></div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="outgoingRentalsData.length == 0">
+                        <td colspan="4" style="text-align: center;">
+                            <h4>No Outgoing Rental Requests Yet!</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Add/Update Product Info Modal -->
+<div class="custom-modal modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="frmConfig" (ngSubmit)="addUpdateProduct()" class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Product Info</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                    <span class="input-group-addon addon-width"><i class="fa fa-question"></i></span>
+                                        <select id="type" name="type" class="form-control" [(ngModel)]="newProduct.type">
+                                            <option selected="selected" value="0">-- Select Type --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                        <span class="input-group-addon addon-width"><i class="fa fa-font"></i></span>
+                                        <input id="name" [(ngModel)]="newProduct.name" #name="ngModel" class="form-control" required maxlength="50" name="name" type="text" placeholder="Product Name e.g., brand, model etc.">
+                                    </div>
+                                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                                        <div *ngIf="name.errors.required">
+                                            Name is required.
+                                        </div>
+                                        <div *ngIf="name.errors.maxlength">
+                                            Name cannot exceed 50 characters.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                    <span class="input-group-addon addon-width"><i class="fa fa-info"></i></span>
+                                    <textarea id="desc" [(ngModel)]="newProduct.desc" #desc="ngModel" class="form-control" required maxlength="250" name="desc" rows="3" placeholder="Product's description like features, quality, performance etc."></textarea>
+                                    </div>
+                                    <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                                    <div *ngIf="desc.errors.required">
+                                        Description is required.
+                                    </div>
+                                    <div *ngIf="desc.errors.maxlength">
+                                        Description cannot exceed 250 characters.
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="input-group formControDiv">
+                                        <span class="input-group-addon addon-width"><i class="fa fa-rupee-sign"></i></span>
+                                        <input id="price_per_day" [(ngModel)]="newProduct.price_per_day" #price_per_day="ngModel" class="form-control" required maxlength="5" name="price_per_day" type="number" placeholder="Rental price / day">
+                                    </div>
+                                    <div *ngIf="price_per_day.invalid && (price_per_day.dirty || price_per_day.touched)" class="alert alert-danger">
+                                        <div *ngIf="price_per_day.errors.required">
+                                            Price per day is required.
+                                        </div>
+                                        <div *ngIf="price_per_day.errors.maxlength">
+                                            Name cannot exceed 5 digits.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" type="submit">Save</button>
+                    <button id="btnCloseAddUpdateProductModal" class="btn btn-default" type="button" data-dismiss="modal" (click)="initProduct()">Discard</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Image Upload Modal -->
+<div class="custom-modal modal fade" id="imageUploadModal" tabindex="-1" role="dialog" aria-labelledby="imageUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="getProducts()">&times;</button>
+                <h4 class="modal-title">Upload Product Images</h4>
+            </div>
+            <form id="frmImageUpload" (ngSubmit)="uploadImages()" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <h4>Image Best Practices & Guidelines</h4>
+                    <p>
+                        # Max 3 images allowed <br/>
+                        # File format should be in .png, .jpg, or .jpeg <br/>
+                        # Best resolution 800 * 600 <br/>
+                        <span *ngIf="productImagesCount == 0" style="color: green;">You can upload {{canUploadImages}} images.</span>
+                        <span *ngIf="3 > productImagesCount && productImagesCount != 0" style="color: green;">You can upload {{canUploadImages}} more images.</span>
+                        <span *ngIf="productImagesCount == 3" style="color: red;">You have reached the limit of images upload. Please delete existing to upload new images.</span>
+                    </p>
+                    <input *ngIf="productImagesCount == 0" type="file" #productImage1 id="productImage1" name="productImage1" style="color:green;padding-bottom: 5px;">
+                    <input *ngIf="productImagesCount == 0 || productImagesCount == 1" type="file" #productImage2 id="productImage2" name="productImage2" style="color:green;padding-bottom: 5px;">
+                    <input *ngIf="productImagesCount == 0 || productImagesCount == 1 || productImagesCount == 2" type="file" #productImage3 id="productImage3" name="productImage3" style="color:green;padding-bottom: 5px;">
+                    <h5 *ngIf="imgValidationMsg !== null && imgValidationMsg != ''" style="color:red;">{{imgValidationMsg}}</h5>
+                    <h3 *ngIf="isImageUploadSuccessfull == true" style="color:green;">Upload Successfull <i class="fa fa-thumbs-up"></i></h3>
+                    <h3 *ngIf="isImageUploadSuccessfull == false" style="color:red;">Upload Failed! <i class="fa fa-thumbs-down"></i></h3>
+                </div>
+                <div class="modal-footer">
+                    <button *ngIf="productImagesCount != 3 || imagesUploadCount != 3" class="btn btn-info" type="submit">Upload</button>
+                    <button class="btn btn-default" type="button" data-dismiss="modal" (click)="getProducts()">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Image Viewer Modal -->
+<div class="custom-modal modal fade" id="imageViewModal" tabindex="-1" role="dialog" aria-labelledby="imageViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog image-viewer-dialog" role="document">
+        <div *ngIf="hasProductImages == true" class="modal-content image-viewer-content">
+            <div class="modal-body modal-body-imgview">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <angular-image-slider [images]="imagesUrl">
+                </angular-image-slider>
+            </div>
+        </div>
+        <div *ngIf="hasProductImages == false" class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3><i class="fa fa-info-circle"></i> No Images Found!</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Validation Alert Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showValidationModal" data-toggle="modal" data-target="#validationModal">Open Validation Modal</button>
+<div class="custom-modal modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-alert" style="color: red;"></span>&nbsp; Input Not Allowed</h4>
+            </div>
+            <div class="modal-body"><h4>{{validationMsg}}</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Confirmation Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="btnDeleteConfirmModal" data-toggle="modal" data-target="#deleteConfirmModal">Delete Confirmation Modal</button>
+<div class="custom-error-modal modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-question-sign" style="color: red;"></span> Delete?</h4>
+            </div>
+            <div class="modal-body"><h4>Are you sure want to delete?</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" (click)="deleteProduct(delProductId)">Confirm</button>
+                <button id="btnDeleteDiscard" class="btn btn-default" type="button" data-dismiss="modal">Discard</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Success Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showSuccessModal" data-toggle="modal" data-target="#successModal">Open Success Modal</button>
+<div class="custom-success-modal modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-thumbs-up"></span> Success</h4>
+            </div>
+            <div class="modal-body"><h4>Congrats! Product operation successfull.</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Failure Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="showFailureModal" data-toggle="modal" data-target="#failureModal">Open Failure Modal</button>
+<div class="custom-error-modal modal fade" id="failureModal" tabindex="-1" role="dialog" aria-labelledby="failureModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</h4>
+            </div>
+            <div class="modal-body"><h4>Something went wrong. Please try again!</h4></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Owner Info Modal -->
+<button type="button" style="display: none;" class="btn btn-info " id="btnShowOwnerInfoModal" data-toggle="modal" data-target="#ownerInfoModal">Open Owner Info Modal</button>
+<div class="custom-modal modal fade" id="ownerInfoModal" tabindex="-1" role="dialog" aria-labelledby="ownerInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Owner Details</h4>
+            </div>
+            <div class="modal-body">
+                <h4 *ngIf="productOwner.fullname != null">{{productOwner.fullname}} ({{productOwner.phone}})</h4>
+                <h4 *ngIf="productOwner.fullname == null">Mobile Number: {{productOwner.phone}}</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
